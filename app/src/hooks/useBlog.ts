@@ -21,9 +21,9 @@ export const useBlog = () => {
       await program.methods
         .initializeBlog()
         .accounts({
-          blogAccount: blogPda,
+          blog_account: blogPda,
           author: wallet.publicKey,
-          systemProgram: SystemProgram.programId,
+          system_program: SystemProgram.programId,
         })
         .rpc();
 
@@ -55,10 +55,10 @@ export const useBlog = () => {
       await program.methods
         .createPost(title, content)
         .accounts({
-          blogAccount: blogPda,
-          postAccount: postPda,
+          blog_account: blogPda,
+          post_account: postPda,
           author: wallet.publicKey,
-          systemProgram: SystemProgram.programId,
+          system_program: SystemProgram.programId,
         })
         .rpc();
 
@@ -92,7 +92,7 @@ export const useBlog = () => {
       await program.methods
         .updatePost(title, content)
         .accounts({
-          postAccount: postPda,
+          post_account: postPda,
           author: wallet.publicKey,
         })
         .rpc();
@@ -119,8 +119,8 @@ export const useBlog = () => {
       await program.methods
         .deletePost()
         .accounts({
-          blogAccount: blogPda,
-          postAccount: postPda,
+          blog_account: blogPda,
+          post_account: postPda,
           author: wallet.publicKey,
         })
         .rpc();
@@ -152,10 +152,10 @@ export const useBlog = () => {
       await program.methods
         .createComment(content)
         .accounts({
-          postAccount: postPda,
-          commentAccount: commentPda,
+          post_account: postPda,
+          comment_account: commentPda,
           commenter: wallet.publicKey,
-          systemProgram: SystemProgram.programId,
+          system_program: SystemProgram.programId,
         })
         .rpc();
 
@@ -185,9 +185,9 @@ export const useBlog = () => {
       await program.methods
         .initializeProfile(displayName, bio, avatarUrl)
         .accounts({
-          profileAccount: profilePda,
+          profile_account: profilePda,
           author: wallet.publicKey,
-          systemProgram: SystemProgram.programId,
+          system_program: SystemProgram.programId,
         })
         .rpc();
 
@@ -217,7 +217,7 @@ export const useBlog = () => {
       await program.methods
         .updateProfile(displayName, bio, avatarUrl)
         .accounts({
-          profileAccount: profilePda,
+          profile_account: profilePda,
           author: wallet.publicKey,
         })
         .rpc();
