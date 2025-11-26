@@ -16,7 +16,7 @@ export const getProgram = (
     skipPreflight: false,
   });
   
-  return new Program(idl as Blog, provider);
+  return new Program(idl as any, provider);
 };
 
 export const getProgramForRead = (connection: Connection): Program<Blog> => {
@@ -29,5 +29,5 @@ export const getProgramForRead = (connection: Connection): Program<Blog> => {
     }
   );
   
-  return new Program(idl as Blog, provider);
+  return new Program(idl as any, provider);
 };

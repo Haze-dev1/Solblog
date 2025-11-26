@@ -20,10 +20,10 @@ export const useBlog = () => {
 
       await program.methods
         .initializeBlog()
-        .accounts({
-          blog_account: blogPda,
+        .accountsPartial({
+          blogAccount: blogPda,
           author: wallet.publicKey,
-          system_program: SystemProgram.programId,
+          systemProgram: SystemProgram.programId,
         })
         .rpc();
 
@@ -54,11 +54,11 @@ export const useBlog = () => {
 
       await program.methods
         .createPost(title, content)
-        .accounts({
-          blog_account: blogPda,
-          post_account: postPda,
+        .accountsPartial({
+          blogAccount: blogPda,
+          postAccount: postPda,
           author: wallet.publicKey,
-          system_program: SystemProgram.programId,
+          systemProgram: SystemProgram.programId,
         })
         .rpc();
 
@@ -79,7 +79,7 @@ export const useBlog = () => {
     }
   };
 
-  const updatePost = async (postId: number, title: string, content: string) => {
+  const updatePost = async (postId: number, title?: string, content?: string) => {
     if (!wallet) {
       toast.error("Please connect your wallet");
       return;
@@ -90,9 +90,9 @@ export const useBlog = () => {
       const [postPda] = getPostPda(wallet.publicKey, postId);
 
       await program.methods
-        .updatePost(title, content)
-        .accounts({
-          post_account: postPda,
+        .updatePost(title || null, content || null)
+        .accountsPartial({
+          postAccount: postPda,
           author: wallet.publicKey,
         })
         .rpc();
@@ -118,9 +118,8 @@ export const useBlog = () => {
 
       await program.methods
         .deletePost()
-        .accounts({
-          blog_account: blogPda,
-          post_account: postPda,
+        .accountsPartial({
+          postAccount: postPda,
           author: wallet.publicKey,
         })
         .rpc();
@@ -151,11 +150,11 @@ export const useBlog = () => {
 
       await program.methods
         .createComment(content)
-        .accounts({
-          post_account: postPda,
-          comment_account: commentPda,
+        .accountsPartial({
+          postAccount: postPda,
+          commentAccount: commentPda,
           commenter: wallet.publicKey,
-          system_program: SystemProgram.programId,
+          systemProgram: SystemProgram.programId,
         })
         .rpc();
 
@@ -184,10 +183,10 @@ export const useBlog = () => {
 
       await program.methods
         .initializeProfile(displayName, bio, avatarUrl)
-        .accounts({
-          profile_account: profilePda,
+        .accountsPartial({
+          profileAccount: profilePda,
           author: wallet.publicKey,
-          system_program: SystemProgram.programId,
+          systemProgram: SystemProgram.programId,
         })
         .rpc();
 
@@ -200,36 +199,6 @@ export const useBlog = () => {
     }
   };
 
-  const updateProfile = async (
-    displayName: string,
-    bio: string,
-    avatarUrl: string
-  ) => {
-    if (!wallet) {
-      toast.error("Please connect your wallet");
-      return;
-    }
-
-    try {
-      const program = getProgram(connection, wallet);
-      const [profilePda] = getProfilePda(wallet.publicKey);
-
-      await program.methods
-        .updateProfile(displayName, bio, avatarUrl)
-        .accounts({
-          profile_account: profilePda,
-          author: wallet.publicKey,
-        })
-        .rpc();
-
-      toast.success("Profile updated successfully!");
-    } catch (error: any) {
-      console.error("Error updating profile:", error);
-      toast.error(error.message || "Failed to update profile");
-      throw error;
-    }
-  };
-
   return {
     initializeBlog,
     createPost,
@@ -237,6 +206,5 @@ export const useBlog = () => {
     deletePost,
     createComment,
     initializeProfile,
-    updateProfile,
   };
 };

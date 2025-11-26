@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useFetchProfile, useFetchBlog } from "@/hooks/useFetchData";
 import { useBlog } from "@/hooks/useBlog";
+import toast from "react-hot-toast";
 
 export default function ProfileView() {
   const { publicKey } = useWallet();
-  const { initializeProfile, updateProfile, initializeBlog } = useBlog();
+  const { initializeProfile, initializeBlog } = useBlog();
   const { profile, loading: profileLoading } = useFetchProfile(publicKey?.toString());
   const { blog, loading: blogLoading } = useFetchBlog(publicKey?.toString());
   
@@ -29,11 +30,13 @@ export default function ProfileView() {
     setSaving(true);
     try {
       if (profile) {
-        await updateProfile(displayName, bio, avatarUrl);
+        // Profile cannot be updated once created
+        toast.error("Profile cannot be updated once created");
+        setIsEditing(false);
       } else {
         await initializeProfile(displayName, bio, avatarUrl);
+        setIsEditing(false);
       }
-      setIsEditing(false);
     } catch (error) {
       console.error("Error saving profile:", error);
     } finally {
@@ -78,14 +81,7 @@ export default function ProfileView() {
             Your Profile
           </h2>
           
-          {profile && !isEditing && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              Edit Profile
-            </button>
-          )}
+          {/* Profile editing disabled - profiles cannot be updated once created */}
         </div>
 
         {!profile && !isEditing ? (
